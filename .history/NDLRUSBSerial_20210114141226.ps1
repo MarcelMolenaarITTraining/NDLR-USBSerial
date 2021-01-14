@@ -61,7 +61,7 @@ While ($continue) {
     # Draw menu
     Write-Host "##################"
     Write-Host "#                #"
-    Write-Host "# NDLR USBSerial #"
+    Write-Host "# NDLR Librarian #"
     Write-Host "#                #"
     Write-Host "##################"
     Write-Host -nonewline "Connection : " 
