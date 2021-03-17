@@ -1,6 +1,6 @@
 ---
 lab:
-    title: 'Lab 01: Basic Communication with the NDLR'
+    title: 'Lab: Basic Communication with the NDLR'
     module: 'Module 02: Communication'
 ---
 

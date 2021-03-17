@@ -1,6 +1,6 @@
 ---
 lab:
-    title: 'Lab 01: Environment Setup'
+    title: 'Lab: Environment Setup'
     module: 'Module 01: Setup the NDLR'
 ---
 
