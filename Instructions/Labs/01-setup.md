@@ -109,7 +109,7 @@ Find the taskbar on your Windows 10 desktop. The taskbar contains the icons for 
 
     > **Note**: Make sure the NDLR is still connected to the computer. You only disconnect the connection in Cool Term. If Cool Term is still connected, you cannot make a connection with PowerShell.
 
-### Task 5: Find the NDLR COM port with PowerShell 
+#### Task 5: Find the NDLR COM port with PowerShell 
 
 **After** connecting you NDLR, check the available COM ports again and find out on which port your NDLR is listening.
 
