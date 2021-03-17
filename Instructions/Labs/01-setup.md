@@ -9,22 +9,24 @@ lab:
 ## Lab scenario
 
 For those NDLR-ers who want to play around with the [NDLR Librarian](https://github.com/Barilium8/The-NDLR-Librarian) and talk to the NDLR over USB without having to install the [Cool Term](https://github.com/Barilium8/The-NDLR-Librarian/wiki/0) serial terminal program, I have created this [PowerShell script](NDLRUSBSerial.ps1) to get started. It isn't finished but it shows that you don't need install any program to communicate with your [NDLR](https://conductivelabs.com/).
+
 ## Objectives
 
 After you complete this lab, you will be able to:
 
-- Connect the NDLR and find out which COM port it is connected
-- Use Cool Term find Serial connection details 
+- Connect the NDLR and find out which COM port it is connected.
+- Use Cool Term find Serial connection details.
 
 ## Lab Setup
 
-  - **Estimated Time**: 15 minutes
+- **Estimated Time**: 15 minutes
 
 ## Instructions
 
 ### Before you start
 
 #### Sign in to the lab virtual machine
+
 Sign in to your Windows 10 virtual machine (VM) by using the following credentials:
 
 - Username: **Admin**
@@ -52,25 +54,28 @@ Find the taskbar on your Windows 10 desktop. The taskbar contains the icons for 
 
 #### Task 1: Find available COM ports with PowerShell
 
-**Before** connecting you NDLR, you need to retrieve the available COM ports and find out on which port your NDLR is listening. You can use this PowerShell command:
+**Before** connecting you NDLR, you need to retrieve the available COM ports and find out on which port your NDLR is listening.
 
-```
-[System.IO.Ports.SerialPort]::getportnames()
-```
+1. On the taskbar, select the **Windows Terminal** icon.
+1. Enter the following command, and then select Enter to to retrieve the available COM ports and find out on which port your NDLR is listening:
 
-On my machine it returns COM 3 and 4:
+    ```PowerShell
+    [System.IO.Ports.SerialPort]::getportnames()
+    ```
 
-![GetPortNames](images/getportnames-no-ndlr.png)
+    ![GetPortNames](images/getportnames-no-ndlr.png)
 
-![GetPortNames](images/getportnames-no-ndlr-result.png)
+    ![GetPortNames](images/getportnames-no-ndlr-result.png)
 
-> **Note**: Make sure the NDLR is **not**  attached
+    > **Note**: Make sure the NDLR is **not** attached to the computer.
 
 #### Task 2: Connect the NDLR to the computer
 
-1. Connect the NDLR with a USB cable to your computer
+1. Connect the NDLR with a USB cable to your computer.
 
     ![NDLR_Laptop_Connect](images/ndlr_laptop.png)
+
+2. Wait until the NDLR is booted.
 
 #### Task 3: Make a connection with Cool Term
 
@@ -78,15 +83,15 @@ On my machine it returns COM 3 and 4:
 
 1. In Cool Term press **Connect**
 
-![CoolTerm_Connect](images/coolterm_connect.png)
+    ![CoolTerm_Connect](images/coolterm_connect.png)
 
 1. When the NDLR is connected, select **options**
 
-![CoolTerm_Connected](images/coolterm_connected.png)
+    ![CoolTerm_Connected](images/coolterm_connected.png)
 
 1. Make note of the **Serial Port Options**
 
-![CoolTerm_Options](images/coolterm_options.png)
+    ![CoolTerm_Options](images/coolterm_options.png)
 
 1. Open Notepad and write down:
 
@@ -102,18 +107,20 @@ On my machine it returns COM 3 and 4:
 
     ![CoolTerm_Disconnect](images/coolterm_disconnect.png)
 
-> **Note**: Make sure the NDLR is still connected to the computer. You only disconnect the connection in Cool Term. If Cool Term is still connected, you cannot make a connection with PowerShell.
+    > **Note**: Make sure the NDLR is still connected to the computer. You only disconnect the connection in Cool Term. If Cool Term is still connected, you cannot make a connection with PowerShell.
 
 ### Task 5: Find the NDLR COM port with PowerShell 
 
 **After** connecting you NDLR, check the available COM ports again and find out on which port your NDLR is listening.
 
-1. Enter the following command, and then select Enter to retrieve the available COM ports:
-    ```
+1. Switch to the **Windows Terminal**, enter the following command, and then select Enter to retrieve the available COM ports again:
+
+    ```PowerShell
     [System.IO.Ports.SerialPort]::getportnames()
     ```
-    
-1. Make a note of the additional COM port. On my machine the NDLR is connected to **COM5**:
-![GetPortNames](images/getportnames.png)
+
+1. Make a note of the new COM port that appears. On my machine the NDLR is connected to **COM5**:
+
+    ![GetPortNames](images/getportnames.png)
 
 Now you know the connection details needed to communicate with PowerShell. Leave the NDLR connected to the computer and continue with the next exercise.
