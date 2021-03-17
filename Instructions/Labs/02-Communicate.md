@@ -1,8 +1,7 @@
 ---
 lab:
-    title: 'Lab Environment Setup'
-    type: 'Answer Key'
-    module: 'ModSetup'
+    title: 'Lab: Basic Communication with the NDLR'
+    module: 'Module 02: Communication'
 ---
 
 # Lab Environment Setup

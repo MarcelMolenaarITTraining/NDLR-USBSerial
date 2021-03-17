@@ -1,8 +1,7 @@
 ---
 lab:
-    title: 'Lab Environment Setup'
-    type: 'Answer Key'
-    module: 'ModSetup'
+    title: 'Lab: Lab Environment Setup'
+    module: 'Module 01: Setup'
 ---
 
 # Lab Environment Setup
