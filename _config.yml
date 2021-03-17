@@ -1,12 +1,12 @@
+title: 'NDLR-01: Serial communication over USB to the NDLR with PowerShell'
 remote_theme: MicrosoftLearning/Jekyll-Theme
 exclude:
   - readme.md
   - .github/
 header_pages:
   - index.html
-author: Microsoft Learning
-twitter_username: mslearning
-github_username:  MicrosoftLearning
+author: Marcel Molenaar
+github_username:  MarcelMolenaarITTraining
 plugins:
   - jekyll-sitemap
   - jekyll-mentions
