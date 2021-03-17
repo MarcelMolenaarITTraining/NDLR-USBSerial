@@ -1,4 +1,5 @@
 # NDLR-USBSerial
+
 ## Serial communication over USB to the NDLR with PowerShell
 
 For those NDLR-ers who want to play around with the [NDLR Librarian](https://github.com/Barilium8/The-NDLR-Librarian) and talk to the NDLR over USB without having to install the [Cool Term](https://github.com/Barilium8/The-NDLR-Librarian/wiki/0) serial terminal program, I have created this [PowerShell script](NDLRUSBSerial.ps1) to get started. It isn't finished but it shows that you don't need install any program to communicate with your [NDLR](https://conductivelabs.com/). 
@@ -6,6 +7,7 @@ For those NDLR-ers who want to play around with the [NDLR Librarian](https://git
 On a Windows 10 machine, PowerShell and a Windows USB to Serial driver is already installed. The USB Serial driver is [installed automatically](https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-driver-installation-based-on-compatible-ids).
 
 ## PowerShell 
+
 [Writing and Reading info from Serial Ports](https://devblogs.microsoft.com/powershell/writing-and-reading-info-from-serial-ports/) with PowerShell is quite easy. After connecting the NDLR, you need to open the COM port, send a command to the NDLR and read the response.
 
 As far as I know, there is no special Serial Port module to install. However you can use the .Net SerialPost Class and call it directly from PowerShell.
@@ -21,22 +23,26 @@ As far as I know, there is no special Serial Port module to install. However you
 > **Note**: The System.IO.Ports.SerialPort class is also available in [.Net Core](https://www.nuget.org/packages/System.IO.Ports/) so you can also try to run this script on Linux or a Mac.
 
 ## Find available COM ports
+
 After connecting you NDLR, you need to retrieve the available COM ports and find out on which port your NDLR is listening. You can use this PowerShell command:
+
 ```
 [System.IO.Ports.SerialPort]::getportnames()
 ```
+
 On my machine it returns COM 5:
+
 ![GetPortNames](images/getportnames.png)
 
 ## Serial options
 To verify the serial port options, I used Cool Term to make sure.
-</br>
+
 1. In Cool Term press **Connect**
-![CoolTerm_Connect](images/coolterm_connect.png)
+    ![CoolTerm_Connect](images/coolterm_connect.png)
 1. When the NDLR is connected, select **options**
-![CoolTerm_Connected](images/coolterm_connected.png)
+    ![CoolTerm_Connected](images/coolterm_connected.png)
 1. Make note of the **Serial Port Options**
-![CoolTerm_Options](images/coolterm_options.png)
+    ![CoolTerm_Options](images/coolterm_options.png)
 
 Now you can specify or update the variables to use in your PowerShell Script:
 ```
@@ -49,37 +55,50 @@ $stopBits = [system.io.ports.stopbits]::One
 > **Note**: Make sure to use the [Parity Enum](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.parity) and [StopBits Enum](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.stopbits) Enums instead of a String.
 
 ## Open the Serial Port
+
 Now that you now the needed ingredients, its time to open the Serial Port!
+
 ```
 $port= new-Object System.IO.Ports.SerialPort $portName,$baudRate,$parity,$dataBits,$stopBits
 ```
 
 Wait a second to make sure before opening...
+
 ```
 Start-Sleep -Milliseconds 1000
 ```
+
 And open the port:
+
 ```
 $port.Open()
 ```
+
 If have put that command with some logging to the console in a try catch block
 
 # Write data
+
 To send data to the NDLR, you can use the WriteLine() method:
+
 ```
 $command = "text"
 $port.WriteLine($command)
 ```
 
 # Read data
+
 To read data back from the NDLR after sending the command, you can use of course ReadLine(). However you can also use ReadExisting() to read all the data at once:
+
 ```
 $port.ReadExisting()
 ```
 
 # Examples
+
 ### Presets command - \<a\>
+
 To Read a preset from **all** of The NDLR memory slots. The NDLR has 8 memory slots:
+
 ```
 $command = "<a>"
 $port.WriteLine($command)
@@ -94,31 +113,41 @@ PowerShell:
 ![powershell_command_a](images/powershell_commanda.png)
 
 ### Presets command - \<a1\>
+
 To Read a preset from The NDLR memory slot 1:
+
 ```
 $command = "<a1>"
 $port.WriteLine($command)
 ```
+
 Cool Term:
 
 ![coolterm_command_a1](images/coolterm_commanda1.png)
+
 
 PowerShell:
 
 ![powershell_command_a1](images/powershell_commanda1.png)
 
 # NLDRUserSerial script
+
 ## Getting Started
+
 Copy the script to a local directory, open the directory in PowerShell and start the script:
+
 ```
 .\NDLRUSBSerial.ps1
 ```
+
 ## Main Menu
+
 The menu starts with a small menu, disconnected:
 
 ![ndlr_usbserial_mainmenu](images/ndlr_usbserial_mainmenu.png)
 
-## Connect to the NDLR
+### 0) Connect to the NDLR
+
 Use **0** connect to the NDLR. If you are already connected, you can always reconnect if something wrong occurs. Any open connection to the NDLR is closed before it tries to reconnect:
 
 ![ndlr_usbserial_connect](images/ndlr_usbserial_connect.png)
@@ -127,7 +156,8 @@ Use **0** connect to the NDLR. If you are already connected, you can always reco
 
 > **Note**: when you select 9 (disconnect) of x (exit) the connection will be closed. Don't use CTRL+C to end the script. The connection will remain open!
 
-## a) Read Presets (All) or (1-8)
+### a) Read Presets (All) or (1-8)
+
 Use **1** to toggle between the Presets options. You can read all the memory slots at once or just a single memory slot. Make sure to select the right slot number (1-8):
 
 ![ndlr_usbserial_presets_toggle](images/ndlr_usbserial_presets_toggle.png)
@@ -146,38 +176,40 @@ Use **a** to send the command to the NDLR and read the Preset results:
 
 > **Note**: the command **\<a1\>** is send to the NDLR
 
+### b) Read Patterns
 
-## b) Read Patterns
 Use **b** to send the command to the NDLR and read the Pattern results:
 
 ![ndlr_usbserial_read_presets_b](images/ndlr_usbserial_read_presets_b.png)
 
 > **Note**: the command **\<b\>** is send to the NDLR
 
+### c) Read Rhythms
 
-## c) Read Rhythms
 Use **c** to send the command to the NDLR and read the Rhythm results:
 
 ![ndlr_usbserial_read_presets_c](images/ndlr_usbserial_read_presets_c.png)
 
 > **Note**: the command **\<c\>** is send to the NDLR
 
-## d) Read Chord Seq
+### d) Read Chord Seq
+
 Use **d** to send the command to the NDLR and read the Chord Sequence results:
 
 ![ndlr_usbserial_read_presets_d](images/ndlr_usbserial_read_presets_d.png)
 
 > **Note**: the command **\<d\>** is send to the NDLR
 
-## 9) Disconnect
+### 9) Disconnect
+
 Use **9** to disconnect the connection to the NDLR:
 
 ![ndlr_usbserial_disconnect](images/ndlr_usbserial_disconnect.png)
 
-## x) Exit the menu
+### x) Exit the menu
+
 Use **x** to disconnect the connection to the NDLR and exit the script:
 
 ![ndlr_usbserial_exit](images/ndlr_usbserial_exit.png)
 
-
-# Happy noodling!
+**Happy noodling!**
