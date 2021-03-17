@@ -1,6 +1,6 @@
 ---
 lab:
-    title: 'Lab: Basic Communication with the NDLR'
+    title: 'Lab 01: Basic Communication with the NDLR'
     module: 'Module 02: Communication'
 ---
 
@@ -9,6 +9,7 @@ lab:
 
 ## Lab scenario
 
+### PowerShell and Serial Ports 
 [Writing and Reading info from Serial Ports](https://devblogs.microsoft.com/powershell/writing-and-reading-info-from-serial-ports/) with PowerShell is quite easy. After connecting the NDLR, you need to open the COM port, send a command to the NDLR and read the response.
 
 As far as I know, there is no special Serial Port module to install. However you can use the .Net SerialPost Class and call it directly from PowerShell.

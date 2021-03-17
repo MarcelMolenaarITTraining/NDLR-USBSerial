@@ -1,11 +1,10 @@
 ---
 lab:
-    title: 'Lab: Lab Environment Setup'
-    module: 'Module 01: Setup'
+    title: 'Lab 01: Environment Setup'
+    module: 'Module 01: Setup the NDLR'
 ---
 
 # Lab Environment Setup
-# Student lab answer key
 
 ## Lab scenario
 
@@ -14,7 +13,8 @@ For those NDLR-ers who want to play around with the [NDLR Librarian](https://git
 
 After you complete this lab, you will be able to:
 
-- Communicate with the NDLR ovr Serial by PowerShell
+- Connect the NDLR and find out which COM port it is connected
+- Use Cool Term find Serial connection details 
 
 ## Lab Setup
 
@@ -43,32 +43,63 @@ Find the taskbar on your Windows 10 desktop. The taskbar contains the icons for 
 - [Cool Term](https://github.com/Barilium8/The-NDLR-Librarian/wiki/0)
 
 #### Setup Task
+[Cool Term](https://www.freeware.the-meiers.org/) is a simple serial port terminal application (no terminal emulation) that is geared towards hobbyists and professionals with a need to exchange data with hardware connected to serial ports such as servo controllers, robotic kits, GPS receivers, microcontrollers, etc.
 
+1. Visit https://www.freeware.the-meiers.org/ and download and install the latest version of **Cool Term** for your computer.
 
+### Exercise 1: Connect the NDLR and find the COM port 
 
-## PowerShell 
-[Writing and Reading info from Serial Ports](https://devblogs.microsoft.com/powershell/writing-and-reading-info-from-serial-ports/) with PowerShell is quite easy. After connecting the NDLR, you need to open the COM port, send a command to the NDLR and read the response.
+#### Task 1: Find available COM ports with PowerShell
 
-As far as I know, there is no special Serial Port module to install. However you can use the .Net SerialPost Class and call it directly from PowerShell.
-
-| Class/Enum/Method | Description |
-| - | - |
-| [SerialPort Class](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.serialport) | Represents a serial port resource |
-| [Parity Enum](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.parity) | Specifies the parity bit for a SerialPort object |
-| [StopBits Enum](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.stopbits) | Specifies the number of stop bits used on the SerialPort object |
-| [ReadExisting](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.serialport.readexisting) | Specifies the number of stop bits used on the SerialPort object |
-| [WriteLine](https://docs.microsoft.com/en-us/dotnet/api/system.io.ports.serialport.writeline) | Specifies the number of stop bits used on the SerialPort object |
-
-> **Note**: The System.IO.Ports.SerialPort class is also available in [.Net Core](https://www.nuget.org/packages/System.IO.Ports/) so you can also try to run this script on Linux or a Mac.
-
-
-
-### Exercise 1: Find available COM ports 
-
-After connecting you NDLR, you need to retrieve the available COM ports and find out on which port your NDLR is listening. You can use this PowerShell command:
+**Before** connecting you NDLR, you need to retrieve the available COM ports and find out on which port your NDLR is listening. You can use this PowerShell command:
 ```
 [System.IO.Ports.SerialPort]::getportnames()
 ```
-On my machine it returns COM 5:
+On my machine it returns COM 3 and 4:
+![GetPortNames](images/getportnames-no-ndlr.png)
+![GetPortNames](images/getportnames-no-ndlr-result.png)
+> **Note**: Make sure the NDLR is **not**  attached
+
+### Exercise 2: Find NDLR COM port 
+#### Task 1: Connect the NDLR
+1. Connect the NDLR with a USB cable to your computer
+
+    ![NDLR_Laptop_Connect](images/ndlr_laptop.png)
+
+1. On the taskbar, select the **Cool Term** icon.
+
+1. In Cool Term press **Connect**
+![CoolTerm_Connect](images/coolterm_connect.png)
+
+1. When the NDLR is connected, select **options**
+![CoolTerm_Connected](images/coolterm_connected.png)
+
+1. Make note of the **Serial Port Options**
+![CoolTerm_Options](images/coolterm_options.png)
+
+1. Open Notepad and write down:
+
+    1. portName: *COM[yourportnumber]*
+    1. baudRate: 9600
+    1. parity: None
+    1. dataBits: 8
+    1. stopBits: 1
+
+#### Task 4: Disconnect the NDLR
+
+1. Select **disconnect** to disconnect the connection with the NDLR.
+    ![CoolTerm_Disconnect](images/coolterm_disconnect.png)
+
+### Task 5: Find the NDLR COM port with PowerShell 
+
+**After** connecting you NDLR, check the available COM ports again and find out on which port your NDLR is listening.
+
+1. Enter the following command, and then select Enter to retrieve the available COM ports:
+    ```
+    [System.IO.Ports.SerialPort]::getportnames()
+    ```
+    
+1. Make a note of the additional COM port. On my machine the NDLR is connected to **COM5**:
 ![GetPortNames](images/getportnames.png)
 
+Now you know the connection details needed to communicate with PowerShell. Leave the NDLR connected and continue with the next exercise.
