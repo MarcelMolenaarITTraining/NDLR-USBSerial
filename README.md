@@ -38,10 +38,15 @@ On my machine it returns COM 5:
 To verify the serial port options, I used Cool Term to make sure.
 
 1. In Cool Term press **Connect**
+
     ![CoolTerm_Connect](images/coolterm_connect.png)
+
 1. When the NDLR is connected, select **options**
+
     ![CoolTerm_Connected](images/coolterm_connected.png)
+
 1. Make note of the **Serial Port Options**
+
     ![CoolTerm_Options](images/coolterm_options.png)
 
 Now you can specify or update the variables to use in your PowerShell Script:
@@ -124,7 +129,6 @@ $port.WriteLine($command)
 Cool Term:
 
 ![coolterm_command_a1](images/coolterm_commanda1.png)
-
 
 PowerShell:
 
