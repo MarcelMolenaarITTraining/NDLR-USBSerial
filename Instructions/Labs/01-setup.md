@@ -43,6 +43,7 @@ Find the taskbar on your Windows 10 desktop. The taskbar contains the icons for 
 - [Cool Term](https://github.com/Barilium8/The-NDLR-Librarian/wiki/0)
 
 #### Setup Task
+
 [Cool Term](https://www.freeware.the-meiers.org/) is a simple serial port terminal application (no terminal emulation) that is geared towards hobbyists and professionals with a need to exchange data with hardware connected to serial ports such as servo controllers, robotic kits, GPS receivers, microcontrollers, etc.
 
 1. Visit https://www.freeware.the-meiers.org/ and download and install the latest version of **Cool Term** for your computer.
@@ -52,29 +53,39 @@ Find the taskbar on your Windows 10 desktop. The taskbar contains the icons for 
 #### Task 1: Find available COM ports with PowerShell
 
 **Before** connecting you NDLR, you need to retrieve the available COM ports and find out on which port your NDLR is listening. You can use this PowerShell command:
+
 ```
 [System.IO.Ports.SerialPort]::getportnames()
 ```
+
 On my machine it returns COM 3 and 4:
+
 ![GetPortNames](images/getportnames-no-ndlr.png)
+
 ![GetPortNames](images/getportnames-no-ndlr-result.png)
+
 > **Note**: Make sure the NDLR is **not**  attached
 
-### Exercise 2: Find NDLR COM port 
-#### Task 1: Connect the NDLR
+#### Task 2: Connect the NDLR to the computer
+
 1. Connect the NDLR with a USB cable to your computer
 
     ![NDLR_Laptop_Connect](images/ndlr_laptop.png)
 
+#### Task 3: Make a connection with Cool Term
+
 1. On the taskbar, select the **Cool Term** icon.
 
 1. In Cool Term press **Connect**
+
 ![CoolTerm_Connect](images/coolterm_connect.png)
 
 1. When the NDLR is connected, select **options**
+
 ![CoolTerm_Connected](images/coolterm_connected.png)
 
 1. Make note of the **Serial Port Options**
+
 ![CoolTerm_Options](images/coolterm_options.png)
 
 1. Open Notepad and write down:
@@ -85,10 +96,13 @@ On my machine it returns COM 3 and 4:
     1. dataBits: 8
     1. stopBits: 1
 
-#### Task 4: Disconnect the NDLR
+#### Task 4: Disconnect the NDLR from Cool Term
 
-1. Select **disconnect** to disconnect the connection with the NDLR.
+1. In Cool Term select **disconnect** to disconnect the the NDLR.
+
     ![CoolTerm_Disconnect](images/coolterm_disconnect.png)
+
+> **Note**: Make sure the NDLR is still connected to the computer. You only disconnect the connection in Cool Term. If Cool Term is still connected, you cannot make a connection with PowerShell.
 
 ### Task 5: Find the NDLR COM port with PowerShell 
 
@@ -102,4 +116,4 @@ On my machine it returns COM 3 and 4:
 1. Make a note of the additional COM port. On my machine the NDLR is connected to **COM5**:
 ![GetPortNames](images/getportnames.png)
 
-Now you know the connection details needed to communicate with PowerShell. Leave the NDLR connected and continue with the next exercise.
+Now you know the connection details needed to communicate with PowerShell. Leave the NDLR connected to the computer and continue with the next exercise.
