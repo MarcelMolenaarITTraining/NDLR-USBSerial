@@ -1,1 +1,17 @@
-theme: jekyll-theme-architect
+title: 'NDLR-USBSerial: Serial communication over USB to the NDLR with PowerShell'
+remote_theme: MicrosoftLearning/Jekyll-Theme
+exclude:
+  - readme.md
+  - .github/
+header_pages:
+  - index.html
+author: Marcel Molenaar
+github_username:  MarcelMolenaarITTraining
+plugins:
+  - jekyll-sitemap
+  - jekyll-mentions
+  - jemoji
+markdown: kramdown
+kramdown:
+   syntax_highlighter_opts:
+      disable : true
