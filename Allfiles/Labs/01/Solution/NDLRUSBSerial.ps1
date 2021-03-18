@@ -76,14 +76,23 @@ While ($continue) {
     Write-Host -nonewline "Portname   : " 
     Write-Host -foregroundcolor Yellow $portName
     Write-Host ""
-    Write-Host "a. Read Presets ($presetName)"
-    Write-Host "b. Read Patterns"
-    Write-Host "c. Read Rhythims"
-    Write-Host "d. Read Chord Seq" 
+    Write-Host "a. App Version Info" 
+    Write-Host "b. Boot Menu Settings" 
+    Write-Host "c. Read Presets ($presetName)"
+    Write-Host "d. Read Patterns"
+    Write-Host "e. Read Rhythims"
+    Write-Host "f. Read Chord Seq" 
+    Write-Host "h. Show help menu" 
     Write-Host ""
     Write-Host "0. (Re)Connect to NDLR"
-    Write-Host "1. Toggle Presets"
-    Write-Host "8. Toggle Port"
+    Write-Host "1. Toggle Port"
+    Write-Host "2. Toggle Presets"
+    # Write-Host "3. "
+    # Write-Host "4. "
+    # Write-Host "5. "
+    # Write-Host "6. "
+    # Write-Host "7. "
+    # Write-Host "8. "
     Write-Host "9. Disconnect"
     Write-Host ""
     Write-Host "X. Exit the menu"
@@ -161,17 +170,29 @@ While ($continue) {
  
         }
         a { 
-            $command = $presetcommand
+            $command = "a"
         }
         b { 
-            $command = $patternCommand
+            $command = "b"
         }
         c { 
-            $command = $rhythimCommand
+            $command = $presetcommand
         }
         d { 
+            $command = $patternCommand
+        }
+        e { 
+            $command = $rhythimCommand
+        }
+        f { 
             $command = $chordSeqCommand
         }
+        h { 
+            $command = "?"
+        }
+        # x { 
+        #     $command = ""
+        # }
 
         'X' { $continue = $false }
         'x' { $continue = $false }
