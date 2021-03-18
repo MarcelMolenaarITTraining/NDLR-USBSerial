@@ -2,7 +2,9 @@
 
 ## Serial communication over USB to the NDLR with PowerShell
 
-For those NDLR-ers who want to play around with the [NDLR Librarian](https://github.com/Barilium8/The-NDLR-Librarian) and talk to the NDLR over USB without having to install the [Cool Term](https://github.com/Barilium8/The-NDLR-Librarian/wiki/0) serial terminal program, I have created this [PowerShell script](NDLRUSBSerial.ps1) to get started. It isn't finished but it shows that you don't need install any program to communicate with your [NDLR](https://conductivelabs.com/). 
+For those NDLR-ers who want to play around with the [NDLR Librarian](https://github.com/Barilium8/The-NDLR-Librarian) and talk to the NDLR over USB without having to install the [Cool Term](https://github.com/Barilium8/The-NDLR-Librarian/wiki/0) serial terminal program, I have created this [PowerShell script](/blob/main/Allfiles/Labs/01/Solution/NDLRUSBSerial.ps1) to get started. It shows that you don't need install any program to communicate with your [NDLR](https://conductivelabs.com/). 
+
+I also created a [PowerShell mini course](https://marcelmolenaarittraining.github.io/NDLR-USBSerial) to get started. 
 
 On a Windows 10 machine, PowerShell and a Windows USB to Serial driver is already installed. The USB Serial driver is [installed automatically](https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-driver-installation-based-on-compatible-ids).
 
@@ -26,31 +28,13 @@ As far as I know, there is no special Serial Port module to install. However you
 
 After connecting you NDLR, you need to retrieve the available COM ports and find out on which port your NDLR is listening. You can use this PowerShell command:
 
-```
+```PowerShell
 [System.IO.Ports.SerialPort]::getportnames()
 ```
 
-On my machine it returns COM 5:
-
-![GetPortNames](images/getportnames.png)
-
 ## Serial options
-To verify the serial port options, I used Cool Term to make sure.
 
-1. In Cool Term press **Connect**
-
-    ![CoolTerm_Connect](images/coolterm_connect.png)
-
-1. When the NDLR is connected, select **options**
-
-    ![CoolTerm_Connected](images/coolterm_connected.png)
-
-1. Make note of the **Serial Port Options**
-
-    ![CoolTerm_Options](images/coolterm_options.png)
-
-Now you can specify or update the variables to use in your PowerShell Script:
-```
+```PowerShell
 $portName = "COM5"
 $baudRate = 9600
 $parity = [system.io.ports.parity]::None
@@ -61,21 +45,8 @@ $stopBits = [system.io.ports.stopbits]::One
 
 ## Open the Serial Port
 
-Now that you now the needed ingredients, its time to open the Serial Port!
-
-```
+```PowerShell
 $port= new-Object System.IO.Ports.SerialPort $portName,$baudRate,$parity,$dataBits,$stopBits
-```
-
-Wait a second to make sure before opening...
-
-```
-Start-Sleep -Milliseconds 1000
-```
-
-And open the port:
-
-```
 $port.Open()
 ```
 
@@ -83,18 +54,14 @@ If have put that command with some logging to the console in a try catch block
 
 # Write data
 
-To send data to the NDLR, you can use the WriteLine() method:
-
-```
+```PowerShell
 $command = "text"
 $port.WriteLine($command)
 ```
 
 # Read data
 
-To read data back from the NDLR after sending the command, you can use of course ReadLine(). However you can also use ReadExisting() to read all the data at once:
-
-```
+```PowerShell
 $port.ReadExisting()
 ```
 
@@ -104,35 +71,25 @@ $port.ReadExisting()
 
 To Read a preset from **all** of The NDLR memory slots. The NDLR has 8 memory slots:
 
-```
+```PowerShell
 $command = "<a>"
 $port.WriteLine($command)
 ```
 
-Cool Term:
-
-![coolterm_command_a](images/coolterm_commanda.png)
-
-PowerShell:
-
-![powershell_command_a](images/powershell_commanda.png)
+![powershell_command_a](Instructions/Labs/images/powershell_commanda.png)
 
 ### Presets command - \<a1\>
 
 To Read a preset from The NDLR memory slot 1:
 
-```
+```PowerShell
 $command = "<a1>"
 $port.WriteLine($command)
 ```
 
-Cool Term:
-
-![coolterm_command_a1](images/coolterm_commanda1.png)
-
 PowerShell:
 
-![powershell_command_a1](images/powershell_commanda1.png)
+![powershell_command_a1](Instructions/Labs/images/powershell_commanda1.png)
 
 # NLDRUserSerial script
 
@@ -140,7 +97,7 @@ PowerShell:
 
 Copy the script to a local directory, open the directory in PowerShell and start the script:
 
-```
+```PowerShell
 .\NDLRUSBSerial.ps1
 ```
 
@@ -148,15 +105,15 @@ Copy the script to a local directory, open the directory in PowerShell and start
 
 The menu starts with a small menu, disconnected:
 
-![ndlr_usbserial_mainmenu](images/ndlr_usbserial_mainmenu.png)
+![ndlr_usbserial_mainmenu](Instructions/Labs/images/ndlr_usbserial_mainmenu.png)
 
 ### 0) Connect to the NDLR
 
 Use **0** connect to the NDLR. If you are already connected, you can always reconnect if something wrong occurs. Any open connection to the NDLR is closed before it tries to reconnect:
 
-![ndlr_usbserial_connect](images/ndlr_usbserial_connect.png)
+![ndlr_usbserial_connect](Instructions/Labs/images/ndlr_usbserial_connect.png)
 
-![ndlr_usbserial_connected](images/ndlr_usbserial_connected.png)
+![ndlr_usbserial_connected](Instructions/Labs/images/ndlr_usbserial_connected.png)
 
 > **Note**: when you select 9 (disconnect) of x (exit) the connection will be closed. Don't use CTRL+C to end the script. The connection will remain open!
 
@@ -164,19 +121,19 @@ Use **0** connect to the NDLR. If you are already connected, you can always reco
 
 Use **1** to toggle between the Presets options. You can read all the memory slots at once or just a single memory slot. Make sure to select the right slot number (1-8):
 
-![ndlr_usbserial_presets_toggle](images/ndlr_usbserial_presets_toggle.png)
+![ndlr_usbserial_presets_toggle](Instructions/Labs/images/ndlr_usbserial_presets_toggle.png)
 
 Presets (All) - All memory slots
 
-![ndlr_usbserial_presets_all](images/ndlr_usbserial_presets_all.png)
+![ndlr_usbserial_presets_all](Instructions/Labs/images/ndlr_usbserial_presets_all.png)
 
 Present (1) - Memory Slot 1
 
-![ndlr_usbserial_presets_1](images/ndlr_usbserial_presets_1.png)
+![ndlr_usbserial_presets_1](Instructions/Labs/images/ndlr_usbserial_presets_1.png)
 
 Use **a** to send the command to the NDLR and read the Preset results:
 
-![ndlr_usbserial_read_presets_a1](images/ndlr_usbserial_read_presets_a1.png)
+![ndlr_usbserial_read_presets_a1](Instructions/Labs/images/ndlr_usbserial_read_presets_a1.png)
 
 > **Note**: the command **\<a1\>** is send to the NDLR
 
@@ -184,7 +141,7 @@ Use **a** to send the command to the NDLR and read the Preset results:
 
 Use **b** to send the command to the NDLR and read the Pattern results:
 
-![ndlr_usbserial_read_presets_b](images/ndlr_usbserial_read_presets_b.png)
+![ndlr_usbserial_read_presets_b](Instructions/Labs/images/ndlr_usbserial_read_presets_b.png)
 
 > **Note**: the command **\<b\>** is send to the NDLR
 
@@ -192,7 +149,7 @@ Use **b** to send the command to the NDLR and read the Pattern results:
 
 Use **c** to send the command to the NDLR and read the Rhythm results:
 
-![ndlr_usbserial_read_presets_c](images/ndlr_usbserial_read_presets_c.png)
+![ndlr_usbserial_read_presets_c](Instructions/Labs/images/ndlr_usbserial_read_presets_c.png)
 
 > **Note**: the command **\<c\>** is send to the NDLR
 
@@ -200,7 +157,7 @@ Use **c** to send the command to the NDLR and read the Rhythm results:
 
 Use **d** to send the command to the NDLR and read the Chord Sequence results:
 
-![ndlr_usbserial_read_presets_d](images/ndlr_usbserial_read_presets_d.png)
+![ndlr_usbserial_read_presets_d](Instructions/Labs/images/ndlr_usbserial_read_presets_d.png)
 
 > **Note**: the command **\<d\>** is send to the NDLR
 
@@ -208,12 +165,12 @@ Use **d** to send the command to the NDLR and read the Chord Sequence results:
 
 Use **9** to disconnect the connection to the NDLR:
 
-![ndlr_usbserial_disconnect](images/ndlr_usbserial_disconnect.png)
+![ndlr_usbserial_disconnect](Instructions/Labs/images/ndlr_usbserial_disconnect.png)
 
 ### x) Exit the menu
 
 Use **x** to disconnect the connection to the NDLR and exit the script:
 
-![ndlr_usbserial_exit](images/ndlr_usbserial_exit.png)
+![ndlr_usbserial_exit](Instructions/Labs/images/ndlr_usbserial_exit.png)
 
 **Happy noodling!**
