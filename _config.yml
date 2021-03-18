@@ -1,4 +1,4 @@
-title: 'NDLR-01: Serial communication over USB to the NDLR with PowerShell'
+title: 'NDLR-01: NDLR USB Serial with PowerShell'
 remote_theme: MicrosoftLearning/Jekyll-Theme
 exclude:
   - readme.md
