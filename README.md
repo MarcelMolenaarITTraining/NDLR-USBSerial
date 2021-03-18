@@ -4,11 +4,13 @@
 
 For those NDLR-ers who want to play around with the [NDLR Librarian](https://github.com/Barilium8/The-NDLR-Librarian) and talk to the NDLR over USB without having to install the [Cool Term](https://github.com/Barilium8/The-NDLR-Librarian/wiki/0) serial terminal program, I have created this [PowerShell script](/blob/main/Allfiles/Labs/01/Solution/NDLRUSBSerial.ps1) to get started. It shows that you don't need install any program to communicate with your [NDLR](https://conductivelabs.com/). 
 
-I also created a [PowerShell mini course](https://marcelmolenaarittraining.github.io/NDLR-USBSerial) to get started. 
+More info about getting started with the [NLDRUserSerial script](NDLR-USBSerial.md).
 
-On a Windows 10 machine, PowerShell and a Windows USB to Serial driver is already installed. The USB Serial driver is [installed automatically](https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-driver-installation-based-on-compatible-ids).
+I also created a [PowerShell mini course](https://marcelmolenaarittraining.github.io/NDLR-USBSerial) to get started and learn PowerShell on the fly. 
 
 ## PowerShell 
+
+On a Windows 10 machine, PowerShell and a Windows USB to Serial driver is already installed. The USB Serial driver is [installed automatically](https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-driver-installation-based-on-compatible-ids).
 
 [Writing and Reading info from Serial Ports](https://devblogs.microsoft.com/powershell/writing-and-reading-info-from-serial-ports/) with PowerShell is quite easy. After connecting the NDLR, you need to open the COM port, send a command to the NDLR and read the response.
 
