@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-Copy the [NDLRUSBSerial script](/blob/main/Allfiles/Labs/01/Solution/NDLRUSBSerial.ps1) to a local directory, open the directory in PowerShell and start the script:
+Copy the [NDLRUSBSerial script](/Allfiles/Labs/01/Solution/NDLRUSBSerial.ps1) to a local directory, open the directory in PowerShell and start the script:
 
 ```PowerShell
 .\NDLRUSBSerial.ps1
