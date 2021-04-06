@@ -259,11 +259,36 @@ While ($continue) {
                 # In monitor mode clear screen in loop
                 if ($monitorLive) { Clear-Host }
 
-                # Read result from NDLR
                 $data = $port.ReadExisting()
                 
-                $getTimestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss.fff"
+                # Convert Raw data to PowerShell Object
+                $rawData = $data -replace '\r\n'
+                $separator = "<","><",">"
+                $presetData = $rawData.Split($separator, [System.StringSplitOptions]::RemoveEmptyEntries)
+                $presetNumber = $presetData[0] -replace '^Dump RAW Preset:[\d{2}]*?'
+                $presetHashtable = [ordered]@{
+                    PresetNumber = $presetNumber
+                    PreL01 = @($presetData[1] -replace 'PreL\d{02}\-' -split ',')
+                    PreL02 = @($presetData[2] -replace 'PreL\d{02}\-' -split ',')
+                    PreL03 = @($presetData[3] -replace 'PreL\d{02}\-' -split ',')
+                    PreL04 = @($presetData[4] -replace 'PreL\d{02}\-' -split ',')
+                    PreL05 = @($presetData[5] -replace 'PreL\d{02}\-' -split ',')
+                    PreL06 = @($presetData[6] -replace 'PreL\d{02}\-' -split ',')
+                    PreL07 = @($presetData[7] -replace 'PreL\d{02}\-' -split ',')
+                    PreL08 = @($presetData[8] -replace 'PreL\d{02}\-' -split ',')
+                    PreL09 = @($presetData[9] -replace 'PreL\d{02}\-' -split ',')
+                    PreL10 = @($presetData[10] -replace 'PreL\d{02}\-' -split ',')
+                }
+                $presetObject = [pscustomobject]$presetHashtable
+
+                # Convert data to Json
+                $presetJson = $presetObject | ConvertTo-Json -Depth 2
+                
+                $getTimestamp = Get-Date -Format "yyyy-MM-dd_HH:mm:ss:fff"
+                $fileTimestamp = Get-Date -Format "yyyyMMdd_HHmmssfff"
+                $presetFileName = "c:\temp\Preset{0:00}-{1}.json" -f [int]$presetNumber, $fileTimestamp
                 Write-Output ("[" + $getTimestamp + "] " + $data)
+                $presetJson | Out-File $presetFileName
 
                 if ($monitorLive) { 
                     Write-Host "Press any key to stop..."
