@@ -177,38 +177,167 @@ function Read-NDLRSerialResult {
 function Convert-NDLRDataToJson {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory=$True,
+        ValueFromPipeline=$True,
+        ValueFromPipelineByPropertyName=$True,
+        HelpMessage='Serial input data from the NDLR')]
         [string]$Data
     )
     
     # Convert Raw data to PowerShell Object
-    $rawData = $data -replace '\r\n'
-    $separator = "<","><",">"
-    $presetData = $rawData.Split($separator, [System.StringSplitOptions]::RemoveEmptyEntries)
-    $presetNr = $presetData[0] -replace '^Dump RAW Preset:[\d{2}]*?'
-    $presetHashtable = [ordered]@{
-        Preset = $presetNr
-        PreL01 = @($presetData[1] -replace 'PreL\d{02}\-' -split ',')
-        PreL02 = @($presetData[2] -replace 'PreL\d{02}\-' -split ',')
-        PreL03 = @($presetData[3] -replace 'PreL\d{02}\-' -split ',')
-        PreL04 = @($presetData[4] -replace 'PreL\d{02}\-' -split ',')
-        PreL05 = @($presetData[5] -replace 'PreL\d{02}\-' -split ',')
-        PreL06 = @($presetData[6] -replace 'PreL\d{02}\-' -split ',')
-        PreL07 = @($presetData[7] -replace 'PreL\d{02}\-' -split ',')
-        PreL08 = @($presetData[8] -replace 'PreL\d{02}\-' -split ',')
-        PreL09 = @($presetData[9] -replace 'PreL\d{02}\-' -split ',')
-        PreL10 = @($presetData[10] -replace 'PreL\d{02}\-' -split ',')
+    $rawLines = $data -split '\r\n'
+    Write-Host "Found $($rawLines.Count) lines in data block"
+
+    
+    $ndlrHashtable = @()  # Level 1     Preset Type, Presets
+    $ndlrPresets = @()    # Level 2     Preset, Slots
+    $ndlrSlots = @()      # Level 3     Slot, Lines
+    $ndlrLines = @()      # Level 4     Line, Data
+    $presetCount = 0     # intial preset nr
+    $slotCount = 0        # intial slot nr
+    $lineCount = 0        # intial line nr
+    
+    # Parse raw lines
+    $presetNumber = 1  # Create first preset
+    foreach ($rawLine in $rawLines)
+    {
+        if ($rawLine -match "Dump")  
+        {
+            Write-Host "-----------"
+            Write-Host "Memory slot"
+            Write-Host "-----------"
+            $separator = " ", ":" 
+            $dumpParts = $rawLine.Split($separator)
+            $presetType = $dumpParts[1]  
+            $slotNumber = $dumpParts[2]
+            Write-Host "Type: $presetType"
+            Write-Host "Memory slot: $slotNumber"
+
+            # $ndlrHashtable.add('Type', $type)
+            # $ndlrHashtable.add('Slot', $slot)
+            # $ndlrHashtable.add('Lines', @{})
+            # $ndlrSlots += [PSCustomObject]@{
+            #     'Slot' = $slot
+            #     'Lines' = $ndlrLines
+            # }
+            # $ndlrPresets += [pscustomobject]@{
+            #     'Preset' = $presetCount
+            #     'Slots' = $ndlrSlots
+            # }      
+            # $ndlrHashtable += [PSCustomObject]@{
+            #     'PresetType' = $type
+            #     'Presets' = $ndlrPresets
+            # }
+            if ($slotNumber -gt $slotCount)
+            {
+                Write-Host "Add new slot"
+                $ndlrSlots += [PSCustomObject]@{
+                    'Slot' = $slotNumber
+                    'Lines' = @()
+                }
+                $slotCount = $slotNumber
+            } # add slot
+            else {
+                Write-Host "Update existing slot"
+                $ndlrSlots[$slotCount-1] = [PSCustomObject]@{
+                    'Slot' = $slotNumber
+                    'Lines' = $ndlrLines
+                }
+            } # update slot
+            
+        } # match dump 
+        elseif ($rawLine -match "#") {
+            Write-Verbose "Found data line: $rawLine"
+            $lineParts = $rawLine -replace '#' -split ' '
+            $lineNumber = $lineParts[0]  
+            $lineData = $lineParts[1]
+            Write-Host "Line number: $lineNumber"
+            Write-Host "Line data: $lineData"
+            # $ndlrHashtable.Lines.add('Line', $lineNumber)
+            # $ndlrHashtable.Lines.add('Data', $lineData)
+            
+            if ($lineNumber -gt $lineCount)
+            {
+                Write-Host "Add new line"
+                $ndlrLines += [PSCustomObject]@{
+                    Line = $lineNumber
+                    Data = $lineData
+                }
+                $lineCount = $lineNumber
+            } # add line
+            else {
+                Write-Host "Update existing line"
+                $ndlrLines[$lineCount-1] = [PSCustomObject]@{
+                    Line = $lineNumber
+                    Data = $lineData
+                }
+            } # update line
+        } # match line
+    
+        # Update presets
+        if ($presetNumber -gt $presetCount)
+        {
+            $ndlrPresets += [pscustomobject]@{
+                'Preset' = $presetCount
+                'Slots' = @()
+            }
+            $presetCount = $presetNumber
+        } # add preset
+        else {
+            $ndlrPresets[$presetCount-1] = [pscustomobject]@{
+                'Preset' = $presetCount
+                'Slots' = $ndlrSlots
+            }
+        } # update preset
     }
+    $ndlrHashtable += [PSCustomObject]@{
+        'PresetType' = $presetType
+        'Presets' = $ndlrPresets
+    }    
+    # # Count Dump lines
+    # $dumps = $rawData -match "Dump"
+    # Write-Host "Found $($dumps.Count) memory slots"
+    
+    # $separator = " ", ":" 
+    # foreach ($dump in $dumps) {
+    #     $dumpParts = $dump.Split($separator)
+    #     $type = $dumpParts[1]  
+    #     $slot = $dumpParts[2]
+    #     Write-Host "Type: $type"
+    #     Write-Host "Memory slot: $slot" 
+    # }
 
-    $presetObject = [pscustomobject]$presetHashtable
+    # $separator = "<","><",">"
+    # $presetData = $rawData.Split($separator, [System.StringSplitOptions]::RemoveEmptyEntries)
+    # $presetNr = $presetData[0] -replace '^Dump *:[\d{2}]*?'
+    # $presetHashtable = [ordered]@{
+    #     Preset = $presetNr
+    #     PreL01 = @($presetData[1] -replace 'PreL\d{02}\-' -split ',')
+    #     PreL02 = @($presetData[2] -replace 'PreL\d{02}\-' -split ',')
+    #     PreL03 = @($presetData[3] -replace 'PreL\d{02}\-' -split ',')
+    #     PreL04 = @($presetData[4] -replace 'PreL\d{02}\-' -split ',')
+    #     PreL05 = @($presetData[5] -replace 'PreL\d{02}\-' -split ',')
+    #     PreL06 = @($presetData[6] -replace 'PreL\d{02}\-' -split ',')
+    #     PreL07 = @($presetData[7] -replace 'PreL\d{02}\-' -split ',')
+    #     PreL08 = @($presetData[8] -replace 'PreL\d{02}\-' -split ',')
+    #     PreL09 = @($presetData[9] -replace 'PreL\d{02}\-' -split ',')
+    #     PreL10 = @($presetData[10] -replace 'PreL\d{02}\-' -split ',')
+    # }
 
-    # Convert data to Json
-    $outputJson = $presetObject | ConvertTo-Json -Depth 2
-        
+    # $presetObject = [pscustomobject]$presetHashtable
+
+    # # Convert data to Json
+    # $outputJson = $presetObject | ConvertTo-Json -Depth 2
+    # Write-Output $outputJson
+    # Write-Host -foregroundcolor Yellow "To Do: NDLR Json format"
+    # # return $outputJson
+   
+    $ndlrObject = [pscustomobject]$ndlrHashtable
+    $outputJson = $ndlrObject | ConvertTo-Json -Depth 2
+
     Write-Output $outputJson
     Write-Host -foregroundcolor Yellow "To Do: NDLR Json format"
-    # return $outputJson
-   
+    
 
 } # function Convert-NDLRDataToJson
 
