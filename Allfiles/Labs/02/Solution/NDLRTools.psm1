@@ -83,7 +83,6 @@ function Connect-NDLR {
     }
 } # function Connect-NDLR
 
-
 function Disconnect-NDLR {
     [CmdletBinding()]
     param(
@@ -211,7 +210,29 @@ function Convert-NDLRDataToJson {
     # return $outputJson
    
 
-} # function
+} # function Convert-NDLRDataToJson
+
+function Convert-NDLRJsonToData {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$True,
+        ValueFromPipeline=$True,
+        ValueFromPipelineByPropertyName=$True,
+        HelpMessage='Input from a json file')]
+        [string]$json
+    )
+
+    $jsonObject = ConvertFrom-Json $json
+
+    if ($null -eq $jsonObject)
+    {
+        return 0
+    }
+    Write-Output $jsonObject
+    Write-Host -foregroundcolor Yellow "To Do: Convert PS Object to NDLR Data"
+    # return $jsonObject
+
+} # function Convert-NDLRJsonToData
 
 function Import-NDLRJson {
     [CmdletBinding()]
@@ -228,7 +249,7 @@ function Import-NDLRJson {
     # Write-Output $output   
     return $output
 
-} # function
+} # function Import-NDLRJson
 
 function Export-NDLRJson {
     [CmdletBinding()]
@@ -280,31 +301,10 @@ function Export-NDLRJson {
     # $jsonOutPut = $importCsv | ConvertTo-Json
     # $jsonOutPut | Out-File $jsonFile
 
-} # function
-
-function Convert-NDLRJsonToData {
-    [CmdletBinding()]
-    param(
-        [Parameter(Mandatory=$True,
-        ValueFromPipeline=$True,
-        ValueFromPipelineByPropertyName=$True,
-        HelpMessage='Input from a json file')]
-        [string]$json
-    )
-
-    $jsonObject = ConvertFrom-Json $json
-
-    if ($null -eq $jsonObject)
-    {
-        return 0
-    }
-    Write-Output $jsonObject
-    Write-Host -foregroundcolor Yellow "To Do: Convert PS Object to NDLR Data"
-    # return $jsonObject
-
-} # function
+} # function Export-NDLRJson
 
 
+# function test-jsondepth {
 # [int] $maximumDepth = -1
     # [int] $depth = 0
     # [char[]] $startingBrackets = '[', '{'
@@ -334,3 +334,4 @@ function Convert-NDLRJsonToData {
     # $presets = @($jsonObject.PresetNumber, $jsonObject.PreL01)
   
     # return $presets
+# }

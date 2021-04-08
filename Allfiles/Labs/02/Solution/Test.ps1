@@ -1,6 +1,7 @@
 .\ReImportModule.ps1
+Set-Location "C:\Users\MarcelMolenaar\OneDrive - Marcel Molenaar\Git\NDLR-USBSerial\Allfiles\Labs\02\Solution\" 
 Get-Command -noun NDLR*
-Clear
+Clear-Host
 
 $file = "Preset01-20210406_141222901.json"
 $wrongFile = "Preset01-20210407_114925939.json"
@@ -29,3 +30,5 @@ Convert-NDLRJsonToData -Json $jsonfile
 Import-NDLRJson -Path $file | Convert-NDLRJsonToData
 
 # Test Convert-NDLRDataToJson
+
+
